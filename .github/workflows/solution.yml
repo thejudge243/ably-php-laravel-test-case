@@ -13,20 +13,18 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
+      matrix:
+        php-version: [7.2, 7.3, 7.4, 8.0]
 
     steps:
       - uses: actions/checkout@v2
         with:
           submodules: 'recursive'
 
-      - name: PHP Installation
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y php8.0
-          php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-          php composer-setup.php --install-dir=/usr/local/bin --filename=composer
-          php -r "unlink('composer-setup.php');"
-        
+      - name: Set up PHP ${{ matrix.php-version }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
 
       - name: Validate composer.json and composer.lock
         run: composer validate
