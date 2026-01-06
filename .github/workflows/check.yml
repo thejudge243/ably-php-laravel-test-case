@@ -1,6 +1,8 @@
 # Loosely based upon:
 #   https://github.com/actions/starter-workflows/blob/main/ci/php.yml
 
+name: Check 
+
 on:
   pull_request:
   push:
@@ -19,12 +21,13 @@ jobs:
         with:
           submodules: 'recursive'
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-            php-version: '7.4'
-            extensions: mbstring, dom, curl
-        
+      - name: PHP Installation
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y php8.0
+          php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+          php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+          php -r "unlink('composer-setup.php');"        
 
       - name: Validate composer.json and composer.lock
         run: composer validate
