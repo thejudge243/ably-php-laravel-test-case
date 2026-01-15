@@ -37,5 +37,5 @@ jobs:
 
       # the test script is configured in composer.json.
       # see: https://getcomposer.org/doc/articles/scripts.md
-      - name: Run test suite
+      - name: Run test suites
         run: composer run-script test
