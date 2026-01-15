@@ -1,3 +1,4 @@
+
 # Loosely based upon:
 #   https://github.com/actions/starter-workflows/blob/main/ci/php.yml
 
@@ -23,15 +24,11 @@ jobs:
 
       - name: PHP Installation
         run: |
-          sudo apt-get install software-properties-common
-          sudo add-apt-repository ppa:ondrej/php
           sudo apt-get update
           sudo apt-get install -y php8.0
-          sudo apt-get install -y php8.0-curl php8.0-xml php8.0-mbstring
           php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
           php composer-setup.php --install-dir=/usr/local/bin --filename=composer
           php -r "unlink('composer-setup.php');"        
-
       - name: Validate composer.json and composer.lock
         run: composer validate
 
