@@ -11,30 +11,26 @@ on:
 
 jobs:
   check:
-
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
         with:
-          submodules: 'recursive'
+            submodules: 'recursive'
 
-      - name: PHP Installation
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y php8.1
-          php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-          php composer-setup.php --install-dir=/usr/local/bin --filename=composer
-          php -r "unlink('composer-setup.php');"        
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+
       - name: Validate composer.json and composer.lock
         run: composer validate
 
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress --no-suggest
 
-      # the test script is configured in composer.json.
-      # see: https://getcomposer.org/doc/articles/scripts.md
       - name: Run test suites
         run: composer run-script test
