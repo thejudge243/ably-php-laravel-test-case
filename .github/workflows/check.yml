@@ -32,7 +32,7 @@ jobs:
         run: composer validate
 
       - name: Install dependencies
-        run: composer install --prefer-dist --no-progress --no-suggest
+        run: composer install --no-scripts --prefer-dist --no-progress
 
       # the test script is configured in composer.json.
       # see: https://getcomposer.org/doc/articles/scripts.md
