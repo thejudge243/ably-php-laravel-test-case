@@ -1,25 +1,28 @@
-name: Check
+# Loosely based upon:
+#   https://github.com/actions/starter-workflows/blob/main/ci/php.yml
+
+name: Check 
 
 on:
   pull_request:
   push:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
   check:
+
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
-      matrix:
-        php: ['7.4'] # add '7.4' only if you truly support it
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v2
         with:
           submodules: 'recursive'
 
       - name: Setup PHP
-      - uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
           tools: composer:v2
@@ -27,12 +30,14 @@ jobs:
 
       - name: Show PHP version
         run: php -v
-
+        
       - name: Validate composer.json and composer.lock
         run: composer validate
 
       - name: Install dependencies
-        run: composer install --prefer-dist --no-progress
+        run: composer install --prefer-dist --no-progress --no-suggest
 
+      # the test script is configured in composer.json.
+      # see: https://getcomposer.org/doc/articles/scripts.md
       - name: Run test suites
         run: composer run-script test
